@@ -1,15 +1,46 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
-  <title>Admin page</title>
+  <meta charset="UTF-8">
+  <title>Users</title>
 </head>
 <body>
-<h1>Admin, welcome spring boot security page!</h1>
 
+<table border="1">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Username</th>
+    <th>Email</th>
+    <th>Roles</th>
+    <th>Operations</th>
+  </tr>
+  </thead>
 
-<form th:action="@{/logout}" method="post">
-  <button type="submit">Выйти</button>
-</form>
+  <tbody>
+  <tr th:each="user : ${users}">
+    <td th:text="${user.id}">ID</td>
+    <td th:text="${user.username}">Username</td>
+    <td th:text="${user.email}">Email</td>
+    <td>
+      <ul>
+        <li th:each="role : ${user.roles}" th:text="${role.name}"></li>
+      </ul>
+    </td>
+    <td>
+      <a th:href="@{/admin/edit?id={id}(id=${user.getId})}">Edit</a>
+
+      <form th:method="DELETE" th:action="@{/admin/delete?id={id}(id=${user.getId})}">
+        <input type="submit" value="Delete"/>
+      </form>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<br>
+
+<input type="button" value="Add" onclick="window.location.href = 'admin/new'"/>
 
 </body>
 </html>

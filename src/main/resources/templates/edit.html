@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Выбор роли</title>
+</head>
+<body>
+
+<form th:method="PATCH" th:action="@{/admin/edit?id={id}(id=${user.id})}" th:object="${roleForm}">
+  <label for="role">Выберите роль:</label>
+  <select id="role" name="name" th:field="*{name}">
+    <option th:each="role : ${roles}" th:value="${role.name}" th:text="${role.name}"></option>
+  </select>
+
+  <br/>
+
+  <input type="submit" value="Отправить"/>
+</form>
+
+</body>
+</html>
+
+
+<!--
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>User</title>
+</head>
+<body>
+
+<form th:method="PATCH" th:action="@{/admin/edit?id={id}(id=${user.id})}" th:object="${user}">
+
+  <label for="username">Username: </label>
+  <input type="text" th:field="*{username}" id="username">
+  <div style="color:red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</div>
+  <br/>
+
+  <label for="password">Password: </label>
+  <input type="password" th:field="*{password}" id="password">
+  <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</div>
+  <br/>
+
+  <label for="email">Email: </label>
+  <input type="text" th:field="*{email}" id="email">
+  <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</div>
+  <br/>
+
+  <label for="roles">Role: </label>
+  <select th:field="*{roles}" multiple="multiple">
+    <option th:each="role : ${roles}" th:value="${role}" th:text="${role.getName}"></option>
+  </select>
+  <div style="color:red" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">Role error</div>
+  <br/>
+
+  &lt;!&ndash; Add other fields like name, lastName, age... &ndash;&gt;
+
+  <input type="submit" value="Update!">
+</form>
+
+</body>
+</html>
+
+-->
+
+
+<!--
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>User</title>
+</head>
+<body>
+
+<form th:method="PATCH" th:action="@{/admin/edit?id={id}(id=${user.getId})}" th:object="${user}">
+
+  <label for="username">Username: </label>
+  <input type="text" th:field="*{username}" id="username">
+  <div style="color:red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</div>
+  <br/>
+
+  <label for="password">Password: </label>
+  <input type="password" th:field="*{password}" id="password">
+  <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</div>
+  <br/>
+
+  <label for="email">Email: </label>
+  <input type="text" th:field="*{email}" id="email">
+  <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</div>
+  <br/>
+
+  &lt;!&ndash; Add other fields like name, lastName, age... &ndash;&gt;
+
+  <input type="submit" value="Update!">
+</form>
+
+</body>
+</html>-->
