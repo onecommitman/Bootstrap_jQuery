@@ -12,7 +12,10 @@ import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
 import javax.validation.Valid;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -22,6 +25,7 @@ public class AdminsController {
     private UserService userService;
 
     private RoleService roleService;
+
 
     public AdminsController() {
     }
@@ -44,6 +48,8 @@ public class AdminsController {
     public String newUser(Model model) {
         User user = new User();
         model.addAttribute("user", user);
+        List<Role> allRoles = roleService.getAllRoles();  // Получение списка ролей из  сервиса
+        model.addAttribute("allRoles", allRoles);
         return "new";
     }
 
@@ -51,8 +57,32 @@ public class AdminsController {
     public String create(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
+            System.out.println(bindingResult.getAllErrors());
             return "new";
         }
+
+        Set<Role> userRoles = user.getRoles().stream().collect(Collectors.toSet());
+
+        Set<Role> additionalRoles = new HashSet<>();
+
+        for (Role role : userRoles) {
+
+            switch (role.getName()) {
+                case "ROLE_ADMIN":
+                    additionalRoles.add(roleService.getRoleByName("ROLE_ADMIN"));
+                    additionalRoles.add(roleService.getRoleByName("ROLE_USER"));
+                    break;
+                case "USER":
+                    additionalRoles.add(roleService.getRoleByName("ROLE_USER"));
+                    break;
+                // Дополнительные кейсы по необходимости
+            }
+        }
+
+        userRoles.addAll(additionalRoles);
+        user.setRoles(userRoles);
+
+
         userService.save(user);
         return "redirect:/admin";
 
@@ -64,18 +94,14 @@ public class AdminsController {
 
     @GetMapping("/edit")
     public String showByID(@RequestParam("id") Long id, Model model) {
-        System.out.println("********************************************* Загрузка юзера из БД ******************************************************");
-        //model.addAttribute("user", userService.getUserByID(id));
-        List<Role> roles = roleService.getAllRoles(); // Получение списка ролей из сервиса
-        Role role = new Role();
-        model.addAttribute("roleForm", role); // Добавление объекта Role в модель
-        model.addAttribute("roles", roles);
-        //model.addAttribute("roles+", roleService.getAllRoles());
-        System.out.println("----------------------_SETTED ROLE IS----------------------------------");
-        System.out.println(role.getName());
-        System.out.println("-----------------------USERS ROLES-------------------------------------");
-        System.out.println(roleService.getAllRoles());
-        System.out.println("Загружен юзер из БД для редактирования...");
+
+        User user = userService.getUserByID(id);
+        model.addAttribute("user", user);
+
+        // Передаем список ролей в модель
+        List<Role> allRoles = roleService.getAllRoles();
+        model.addAttribute("allRoles", allRoles);
+
         return "edit";
     }
 
@@ -86,17 +112,15 @@ public class AdminsController {
         if (bindingResult.hasErrors()) {
             return "edit";
         }
-        System.out.printf("\n*********************************************** USER WITH ID = %d WAS UPDATED ***********************************", id);
         userService.updateUser(user);
         return "redirect:/admin";
     }
 
     /*------------------------------------------*/
 
-    @DeleteMapping
+    @DeleteMapping("delete")
     public String delete(@RequestParam("id") Long id) {
-        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-        System.out.println("Deleting user with id" + id);
+
         userService.deleteUserById(id);
         return "redirect:/admin";
     }

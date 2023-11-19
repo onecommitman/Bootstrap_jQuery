@@ -18,6 +18,9 @@
   </thead>
 
   <tbody>
+
+
+
   <tr th:each="user : ${users}">
     <td th:text="${user.id}">ID</td>
     <td th:text="${user.username}">Username</td>
@@ -33,6 +36,7 @@
       <form th:method="DELETE" th:action="@{/admin/delete?id={id}(id=${user.getId})}">
         <input type="submit" value="Delete"/>
       </form>
+
     </td>
   </tr>
   </tbody>
@@ -41,6 +45,10 @@
 <br>
 
 <input type="button" value="Add" onclick="window.location.href = 'admin/new'"/>
+
+<form th:action="@{/logout}" method="post">
+  <button type="submit">Logout</button>
+</form>
 
 </body>
 </html>
