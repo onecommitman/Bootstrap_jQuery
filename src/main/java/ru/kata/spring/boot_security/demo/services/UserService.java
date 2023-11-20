@@ -49,16 +49,15 @@ public class UserService implements UserDetailsService {
     @Transactional
     public void updateUser(User user) {
 
-        String oldPassword;
         User tempUser;
-        if(user.getPassword() == null) {
+        if(user.getPassword().equals("")) {
             tempUser = userRepository.findUserById(user.getId());
-            oldPassword = tempUser.getPassword();
-            user.setPassword(oldPassword);
+            user.setPassword(tempUser.getPassword()); // оставляем старый пароль
+            userRepository.save(user);
+        } else {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepository.save(user);
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
 
     }
 
