@@ -20,7 +20,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserService userService;
 
 
-
     @Autowired
     public WebSecurityConfig(SuccessUserHandler successUserHandler, UserService userService) {
         this.successUserHandler = successUserHandler;
@@ -34,7 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //.antMatchers().permitAll()
                 .antMatchers("/user").hasRole("USER")
                 .antMatchers("/index").authenticated()
-                .antMatchers("/admin/**").hasRole("ADMIN") // ROLE_ADMIN, ROLE_SUPERADMIN
+                .antMatchers("/admin/**").hasRole("ADMIN") // ROLE_ADMIN, ROLE_USER
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
