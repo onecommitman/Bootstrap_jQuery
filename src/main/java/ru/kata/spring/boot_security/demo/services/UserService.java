@@ -27,7 +27,7 @@ public class UserService implements UserDetailsService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
@@ -35,12 +35,12 @@ public class UserService implements UserDetailsService {
 
     ///CRUD operations
 
-    @Transactional(readOnly = true)
+    @Transactional
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public User getUserByID(Long id) {
         Optional <User> optionalUser = Optional.ofNullable(userRepository.findUserById(id));
         return optionalUser.get();
@@ -61,7 +61,7 @@ public class UserService implements UserDetailsService {
 
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public void save(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);

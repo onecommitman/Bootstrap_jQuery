@@ -34,9 +34,7 @@ public class Role implements GrantedAuthority {
 
     @Override
     public String toString() {
-        return "Role{" +
-                "name='" + name + '\'' +
-                '}';
+        return name.replace("ROLE_", "");
     }
 
     @Override

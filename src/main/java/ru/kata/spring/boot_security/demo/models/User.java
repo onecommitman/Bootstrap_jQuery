@@ -94,6 +94,14 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
+    public String getRolesString(){
+        StringBuilder sb = new StringBuilder();
+        for(Role role: roles){
+            sb.append(role.getName().substring(5)).append(" ");
+        }
+        return sb.toString();
+    }
+
     @Override
     public String toString() {
         return "User{" +

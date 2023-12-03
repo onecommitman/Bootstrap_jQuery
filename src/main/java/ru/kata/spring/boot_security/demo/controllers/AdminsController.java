@@ -12,8 +12,10 @@ import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -38,8 +40,16 @@ public class AdminsController {
     }
 
     @GetMapping
-    public String index(Model model) {
+    public String index(@ModelAttribute("newUser") User newUser, Principal principal, Model model) {
+        Optional<User> optionalAdmin = userService.findByUsername(principal.getName());
+        User admin = optionalAdmin.get();
+        System.out.println("*************************ADMIN PARAMS*********************");
+        System.out.println(admin.getUsername());
+        System.out.println(admin.getEmail());
+
+        model.addAttribute("admin", admin);
         model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("roles", roleService.getAllRoles());
         return "admin";
     }
 
@@ -54,7 +64,7 @@ public class AdminsController {
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
+    public String create(@ModelAttribute("user") User user, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             System.out.println(bindingResult.getAllErrors());
@@ -72,7 +82,7 @@ public class AdminsController {
                     additionalRoles.add(roleService.getRoleByName("ROLE_ADMIN"));
                     additionalRoles.add(roleService.getRoleByName("ROLE_USER"));
                     break;
-                case "USER":
+                case "ROLE_USER":
                     additionalRoles.add(roleService.getRoleByName("ROLE_USER"));
                     break;
                 // Дополнительные кейсы по необходимости
