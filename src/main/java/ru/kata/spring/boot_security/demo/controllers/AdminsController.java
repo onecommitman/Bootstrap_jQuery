@@ -39,13 +39,15 @@ public class AdminsController {
 
     }
 
+    @GetMapping("/index")
+    public String mainPage() {
+        return "index";
+    }
+
     @GetMapping
     public String index(@ModelAttribute("newUser") User newUser, Principal principal, Model model) {
         Optional<User> optionalAdmin = userService.findByUsername(principal.getName());
         User admin = optionalAdmin.get();
-        System.out.println("*************************ADMIN PARAMS*********************");
-        System.out.println(admin.getUsername());
-        System.out.println(admin.getEmail());
 
         model.addAttribute("admin", admin);
         model.addAttribute("users", userService.getAllUsers());

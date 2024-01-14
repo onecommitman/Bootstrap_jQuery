@@ -7,6 +7,7 @@ import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RoleService {
@@ -24,5 +25,10 @@ public class RoleService {
 
     public Role getRoleByName(String RoleName) {
         return roleRepository.findRoleByName(RoleName);
+    }
+
+    public Role getRoleById(Long id) {
+        Optional<Role> optionalRole = roleRepository.findById(id);
+        return optionalRole.get();
     }
 }
