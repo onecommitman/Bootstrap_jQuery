@@ -16,17 +16,17 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-public class RESTController {
+public class AdminRESTController {
     private UserService userService;
 
     private RoleService roleService;
 
 
-    public RESTController() {
+    public AdminRESTController() {
     }
 
     @Autowired
-    public RESTController(UserService userService, RoleService roleService) {
+    public AdminRESTController(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
     }
@@ -39,11 +39,6 @@ public class RESTController {
     @GetMapping("/admin/")
     public List<User> showAllUsers() {
         return userService.getAllUsers();
-    }
-
-    @GetMapping("/user")
-    public User getAuthUser(@AuthenticationPrincipal User user) {
-        return user;
     }
 
     @GetMapping("/admin/{id}")
