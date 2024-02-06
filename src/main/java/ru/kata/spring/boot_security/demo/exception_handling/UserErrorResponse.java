@@ -1,9 +1,9 @@
 package ru.kata.spring.boot_security.demo.exception_handling;
 
-public class UserIncorrectData {
+public class UserErrorResponse {
     private String info;
 
-    public UserIncorrectData() {
+    public UserErrorResponse() {
     }
 
     public String getInfo() {

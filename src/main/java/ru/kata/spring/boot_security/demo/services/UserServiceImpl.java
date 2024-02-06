@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kata.spring.boot_security.demo.exception_handling.NoSuchUserException;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
@@ -27,7 +28,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
@@ -42,17 +42,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByID(Long id) {
-        Optional <User> optionalUser = Optional.ofNullable(userRepository.findUserById(id));
-        return optionalUser.get();
+        return userRepository.findUserById(id)
+                .orElseThrow(() -> new NoSuchUserException("User with id " + id + " not found in Database"));
     }
     @Override
     @Transactional
     public void updateUser(User user) {
 
-        User tempUser;
+        Optional<User> tempUser;
         if(user.getPassword().equals("")) {
             tempUser = userRepository.findUserById(user.getId());
-            user.setPassword(tempUser.getPassword()); // оставляем старый пароль
+            user.setPassword(tempUser.get().getPassword()); // оставляем старый пароль
             userRepository.save(user);
         } else {
             user.setPassword(passwordEncoder.encode(user.getPassword()));

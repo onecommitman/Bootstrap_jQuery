@@ -1,6 +1,6 @@
 let currentAdminUrl = 'http://localhost:8080/api/admin/current';
 let getAllUsersUrl = 'http://localhost:8080/api/admin/';
-const rolesApiUrl = `http://localhost:8080/api/roles`;
+const rolesApiUrl = `http://localhost:8080/api/admin/roles`;
 let currentUser = {};
 let allUsersList = {};
 
@@ -301,10 +301,6 @@ $('#newUserForm').submit(async function (event) {
         roles: await getRolesById(parseInt($('#newUserRoles').val()))
     };
 
-    console.log(`form data: `);
-    console.log(formData);
-    //console.log(await getRolesById(parseInt($('#roles').val())));
-
     let requestOptions = {
         method: 'POST',  // Используем метод PUT для обновления данных на сервере
         headers: {
@@ -326,7 +322,7 @@ $('#newUserForm').submit(async function (event) {
             console.log('Данные успешно отправлены на сервер:', data);
             let targetButton = $('#home-tab');
 
-            // Переключение на вкладку со всемит пользователями
+            // Переключение на вкладку со всеми пользователями
             showUsersTable();
             targetButton.trigger('click');
 
